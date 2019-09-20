@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string.h>
-#include <vector>
 
 int pre_function(const std::string& p, int* pi, int i, char& now) {
 	int k = p.size();
@@ -25,23 +24,22 @@ int pre_function(const std::string& p, int* pi, int i, char& now) {
 
 int main() {
 	std::string p;
-	char now = ' ';
+	char empty = ' ';
 	std::cin >> p;
 	int* pi = new int[p.size() + 1];
 	int i = 0;
 	for (i = 0; i < p.size(); i++)
-		pre_function(p, pi, i, now);
+		pre_function(p, pi, i, empty);
 	pi[p.size()] = -1;
-	std::vector<int> answer;
-	std::cin >> now;
-	while (now != '\n') {
-		if (pre_function(p, pi, i, now) == p.size() - 1)
-			answer.push_back(i - 2 * p.size() + 1);
-		now = char(std::cin.get());
+	std::string str;
+	std::cin >> str;
+	for (char now : str) {
+		if (pre_function(p, pi, i, now) == p.size() - 1) {
+			int answer = i - 2 * p.size() + 1;
+			std::cout << answer << " ";
+		}
 		i++;
 	}
-	for (int os : answer)
-		std::cout << os << " ";
 	delete[] pi;
 	return 0;
 }
