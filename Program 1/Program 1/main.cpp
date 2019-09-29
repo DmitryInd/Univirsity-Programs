@@ -11,9 +11,10 @@ int prefix_function(const std::string& pattern, std::vector<int>& prefix_value,
 Функция возращает значение префикс функции для некоторого элемента.
 В функцию подаётся:
 1) Паттерн
-1) Обрабатываемый символ
-2) Индекс, в который будет положено значение префикс функции
-3) Где хранится значение префикс функции предыдущего символа
+2) Вектор значений префикс функции
+4) Обрабатываемый символ
+5) Индекс, в который будет положено значение префикс функции
+6) Где хранится значение префикс функции предыдущего символа
 Это нужно так как:
 1) Строка не хранится польностью, и индексы букв в массиве значений
 префикс функции и в строке не синхронизованы
@@ -27,7 +28,8 @@ int prefix_function(const std::string& pattern, std::vector<int>& prefix_value,
 			break;
 		}
 		previous_array_position = prefix_value[previous_array_position];
-		if (pattern[previous_array_position + 1] == now) {
+		if ((previous_array_position + 1) < pattern.size() &&
+			pattern[previous_array_position + 1] == now) {
 			prefix_value[now_array_position] = previous_array_position + 1;
 			break;
 		}
