@@ -1,45 +1,50 @@
 #include <iostream>
-#include <string.h>
+#include <string>
+#include <vector>
 
-int pre_function(const std::string& p, int* pi, int i, char& now) {
-	int k = p.size();
-	if (i < k) {
-		now = p[i];
-		k = i;
-	}
-	int l = k < p.size() ? k - 1 : k;
+
+
+int pre_function(const std::string& pattern, std::vector<int>& prefix_value,
+					const char now, const int now_array_position,
+					int previous_array_position) { //array - массив значений префикс функции
 	while (true) {
-		if (l < 0) {
-			pi[k] = -1;
+		if (previous_array_position < 0) {
+			prefix_value[now_array_position] = -1;
 			break;
 		}
-		l = pi[l];
-		if (p[l + 1] == now) {
-			pi[k] = l + 1;
+		previous_array_position = prefix_value[previous_array_position];
+		if (pattern[previous_array_position + 1] == now) {
+			prefix_value[now_array_position] = previous_array_position + 1;
 			break;
 		}
 	}
-	return pi[k];
+	return prefix_value[now_array_position];
 }
 
+
 int main() {
-	std::string p;
-	char empty = ' ';
-	std::cin >> p;
-	int* pi = new int[p.size() + 1];
+	std::ios::sync_with_stdio(false);
+	std::cin.tie(nullptr);
+
+	std::string pattern;
+	char now;
 	int i = 0;
-	for (i = 0; i < p.size(); i++)
-		pre_function(p, pi, i, empty);
-	pi[p.size()] = -1;
-	std::string str;
-	std::cin >> str;
-	for (char now : str) {
-		if (pre_function(p, pi, i, now) == p.size() - 1) {
-			int answer = i - 2 * p.size() + 1;
+
+	std::cin >> pattern;
+	std::vector<int> prefix_value(pattern.size() + 1);
+
+	for (; i < pattern.size(); i++)
+		pre_function(pattern, prefix_value, pattern[i], i, i - 1);
+	prefix_value[pattern.size()] = -1;
+	
+	while (std::cin >> now) {
+		if (pre_function(pattern, prefix_value, now,
+						pattern.size(), pattern.size()) == pattern.size() - 1) {
+			int answer = i - 2 * pattern.size() + 1;
 			std::cout << answer << " ";
 		}
 		i++;
 	}
-	delete[] pi;
+
 	return 0;
 }
