@@ -48,7 +48,7 @@ void search_pattern(const std::string& pattern, std::vector<int> &prefix_value) 
 	//Поиск вхождений паттерна с помощью префикс функций
 	while (std::cin >> now) {
 		if (prefix_function(pattern, prefix_value, now,
-			pattern.size(), pattern.size()) == pattern.size() - 1) {
+                            pattern.size(), pattern.size()) == pattern.size() - 1) {
 			int answer = i - 2 * pattern.size() + 1;
 			std::cout << answer << " ";
 		}
