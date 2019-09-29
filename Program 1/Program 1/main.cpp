@@ -6,7 +6,7 @@
 
 int pre_function(const std::string& pattern, std::vector<int>& prefix_value,
 					const char now, const int now_array_position,
-					int previous_array_position) { //array - массив значений префикс функции
+					int previous_array_position) { //array - РјР°СЃСЃРёРІ Р·РЅР°С‡РµРЅРёР№ РїСЂРµС„РёРєСЃ С„СѓРЅРєС†РёРё
 	while (true) {
 		if (previous_array_position < 0) {
 			prefix_value[now_array_position] = -1;
