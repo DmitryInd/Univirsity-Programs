@@ -12,7 +12,9 @@
 class pattern_tree {
 public:
 	pattern_tree();
-	void search_pattern(); //Основная функция поиска паттерна с шаблонами
+
+	friend void search_pattern(const pattern_tree& bor, const std::string &input);
+	friend std::vector<int> number_of_substr(const pattern_tree& bor, const std::string& input);
 
 private:
 	struct node; // forward-декларация для IntelliSense
@@ -33,7 +35,6 @@ private:
 	void build_links();
 	void build_suffix_link(node *now);
 	void build_compressed_suffix_link(node *now);
-	std::vector<int> number_of_substr();
 };
 
 
@@ -107,14 +108,18 @@ void pattern_tree::build_suffix_link(node *now) {
 	node *previous_parent = now->parent;
 	while (true) {
 		node* parent_suffix_link = previous_parent->suffix_link;
+		/*Проверка на то, что мы не попали в бесконечный цикл
+		(Иными словами, дошли до корневого узла)*/
 		if (parent_suffix_link == previous_parent) {
 			now->suffix_link = root.get();
 			break;
 		}
 		
+		//Итератор предполагаемой суффиксальной ссылки
+		auto iterator = parent_suffix_link->edges.find(now->last_char);
 		//Проверка сущестования суффиксальной ссылки
-		if (parent_suffix_link->edges.find(now->last_char) != parent_suffix_link->edges.end()) {
-			now->suffix_link = parent_suffix_link->edges[now->last_char].get();
+		if (iterator != parent_suffix_link->edges.end()) {
+			now->suffix_link = (*iterator).second.get();
 			break;
 		}
 		previous_parent = parent_suffix_link;
@@ -134,38 +139,40 @@ void pattern_tree::build_compressed_suffix_link(node *now) {
 
 
 //Основная функция поиска паттерна с шаблонами
-void pattern_tree::search_pattern() {
+void search_pattern(const pattern_tree &bor, const std::string& input) {
 	//Кол-во входящих подстрок паттерна, начинающегося с индекса i
-	std::vector<int> num = number_of_substr();
+	std::vector<int> num = number_of_substr(bor, input);
 
-	for (int i = 0; i + size_str <= num.size(); i++)
-		if (num[i] == num_substr)
+	for (int i = 0; i + bor.size_str <= num.size(); i++)
+		if (num[i] == bor.num_substr)
 			std::cout << i << " ";
 }
 
 
 //Функция, заполняющая вектор num
-std::vector<int> pattern_tree::number_of_substr() {
+std::vector<int> number_of_substr(const pattern_tree& bor, const std::string& input) {
 	std::vector<int> num;
 	//char chr; //Символ, который мы считали
 	int index = 0; //Индес символа, который мы считали
-	node *now = root.get(); //Узел, в котором сейчас находимся
-	std::string input; //Строка для ввода
-	std::cin >> input;
+	pattern_tree::node *now = bor.root.get(); //Узел, в котором сейчас находимся
 	for (char chr: input) {
 		num.push_back(0);
-		while (now != root.get()) {
-			if (now->edges.find(chr) == now->edges.end())
+		//Итератор, указывающий на узел, в который мы переходим
+		auto iterator = now->edges.find(chr);
+		while (now != bor.root.get()) {
+			if (iterator == now->edges.end()) {
 				now = now->suffix_link;
+				iterator = now->edges.find(chr);
+			}
 			else break;
 		}
 
-		if (now->edges.find(chr) != now->edges.end())
-			now = now->edges[chr].get();
+		if (iterator != now->edges.end())
+			now = (*iterator).second.get();
 
 		//Узел, в котором сейчас находимся при проходе по сжатым циклам
-		node *c_now = now;
-		while (c_now != root.get()) {
+		pattern_tree::node*c_now = now;
+		while (c_now != bor.root.get()) {
 			for (int i = 0; i < c_now->terminal.size(); i++)
 				if (index - c_now->terminal[i] > -2)
 					num[index - c_now->terminal[i] + 1]++;
@@ -182,10 +189,12 @@ int main() {
 	//Ускорение ввода
 	std::ios::sync_with_stdio(false);
 	std::cin.tie(nullptr);
-	//Объявление переменных
-	pattern_tree bor; //Бор
-	bor.search_pattern();
-	//Вывод
-
+	//Построение бора
+	pattern_tree bor;
+	//Ввод
+	std::string input;
+	std::cin >> input;
+	//Поиск вхождений паттерна и вывод индексов
+	search_pattern(bor, input);
 	return 0;
 }
