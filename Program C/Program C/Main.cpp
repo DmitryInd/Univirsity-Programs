@@ -161,7 +161,7 @@ std::vector<int64_t> build_lcp(const std::string& input, const suf_arr& base) {
 }
 
 
-//Проверяет, что подстроки взяты из одинаковых строк
+//Проверяет, что подстроки взяты из одной строки
 bool one_str(const int64_t a, const int64_t b, const int64_t first_size) {
 	bool answer = false;
 	if (a < first_size && b < first_size) {
