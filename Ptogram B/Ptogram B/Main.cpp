@@ -8,25 +8,25 @@ constexpr int ascii_size = 28;
 
 class vertex {
 public:
-	std::vector<vertex*> get_children() const; //Список указателей на дочерние вершины
-	std::pair<int, int> get_info(int str_size) const; //Информация о ребре, которое ведёт в вершину
+	std::vector<vertex*> get_children() const; //РЎРїРёСЃРѕРє СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РґРѕС‡РµСЂРЅРёРµ РІРµСЂС€РёРЅС‹
+	std::pair<int, int> get_info(int str_size) const; //РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЂРµР±СЂРµ, РєРѕС‚РѕСЂРѕРµ РІРµРґС‘С‚ РІ РІРµСЂС€РёРЅСѓ
 
 private:
-	int left_border = 0; //Левая граница ребра, который ведёт к данной вершине
-	int right_border = 0; //Правая граница ребра, который ведёт к данной вершине
+	int left_border = 0; //Р›РµРІР°СЏ РіСЂР°РЅРёС†Р° СЂРµР±СЂР°, РєРѕС‚РѕСЂС‹Р№ РІРµРґС‘С‚ Рє РґР°РЅРЅРѕР№ РІРµСЂС€РёРЅРµ
+	int right_border = 0; //РџСЂР°РІР°СЏ РіСЂР°РЅРёС†Р° СЂРµР±СЂР°, РєРѕС‚РѕСЂС‹Р№ РІРµРґС‘С‚ Рє РґР°РЅРЅРѕР№ РІРµСЂС€РёРЅРµ
 
-	 //Хеш-таблица с указателями на дочерние вершины, которые связаны с перым символом ребра
+	 //РҐРµС€-С‚Р°Р±Р»РёС†Р° СЃ СѓРєР°Р·Р°С‚РµР»СЏРјРё РЅР° РґРѕС‡РµСЂРЅРёРµ РІРµСЂС€РёРЅС‹, РєРѕС‚РѕСЂС‹Рµ СЃРІСЏР·Р°РЅС‹ СЃ РїРµСЂС‹Рј СЃРёРјРІРѕР»РѕРј СЂРµР±СЂР°
 	std::vector<vertex*> children = std::vector<vertex*>(ascii_size, nullptr);
-	//Указатель на родителя
+	//РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЂРѕРґРёС‚РµР»СЏ
 	vertex* parent = this;
-	//Суффиксная ссылка
+	//РЎСѓС„С„РёРєСЃРЅР°СЏ СЃСЃС‹Р»РєР°
 	vertex* suf_ptr = this;
 
 	friend class suf_tree;
 };
 
 
-//Список указателей на дочерние вершины
+//РЎРїРёСЃРѕРє СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РґРѕС‡РµСЂРЅРёРµ РІРµСЂС€РёРЅС‹
 std::vector<vertex*> vertex::get_children() const
 {
 	std::vector<vertex*> values;
@@ -40,14 +40,14 @@ std::vector<vertex*> vertex::get_children() const
 }
 
 
-//Информация о ребре, которое ведёт в вершину
+//РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЂРµР±СЂРµ, РєРѕС‚РѕСЂРѕРµ РІРµРґС‘С‚ РІ РІРµСЂС€РёРЅСѓ
 std::pair<int, int> vertex::get_info(int str_size) const
 {
 	return { left_border, right_border == -1 ? str_size : right_border };
 }
 
 
-//Класс суффиксного дерева
+//РљР»Р°СЃСЃ СЃСѓС„С„РёРєСЃРЅРѕРіРѕ РґРµСЂРµРІР°
 class suf_tree {
 public:
 	suf_tree(const std::string& input);
@@ -57,16 +57,16 @@ public:
 	vertex* root;
 
 private:
-	std::string str; //Строка, на которой основано суффиксное дерево
+	std::string str; //РЎС‚СЂРѕРєР°, РЅР° РєРѕС‚РѕСЂРѕР№ РѕСЃРЅРѕРІР°РЅРѕ СЃСѓС„С„РёРєСЃРЅРѕРµ РґРµСЂРµРІРѕ
 
 	int get_right_border(int board, int now) { return board == -1 ? (now + 1) : board; }
-	void suf_step(std::pair<vertex*, int>& now, int i); //Переход по суффиксной ссылке
-	void new_edge(std::pair<vertex*, int>& now, int i); //Создание нового ответвления c одним символом
+	void suf_step(std::pair<vertex*, int>& now, int i); //РџРµСЂРµС…РѕРґ РїРѕ СЃСѓС„С„РёРєСЃРЅРѕР№ СЃСЃС‹Р»РєРµ
+	void new_edge(std::pair<vertex*, int>& now, int i); //РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ РѕС‚РІРµС‚РІР»РµРЅРёСЏ c РѕРґРЅРёРј СЃРёРјРІРѕР»РѕРј
 	int get_index(char input);
 };
 
 
-//Группировка символов для экономии памяти
+//Р“СЂСѓРїРїРёСЂРѕРІРєР° СЃРёРјРІРѕР»РѕРІ РґР»СЏ СЌРєРѕРЅРѕРјРёРё РїР°РјСЏС‚Рё
 int suf_tree::get_index(char input) {
 	return input - (input <= '$' ? '#' : ('a' - 2));
 }
@@ -77,7 +77,7 @@ suf_tree::~suf_tree()
 	delete_dfs(root);
 }
 
-//Для поветочного удаления
+//Р”Р»СЏ РїРѕРІРµС‚РѕС‡РЅРѕРіРѕ СѓРґР°Р»РµРЅРёСЏ
 void suf_tree::delete_dfs(const vertex* node) {
 	std::vector<vertex*> values = node->children;
 	for (int i = 0; i < values.size(); i++) {
@@ -91,8 +91,8 @@ void suf_tree::delete_dfs(const vertex* node) {
 suf_tree::suf_tree(const std::string& input) {
 	str = input;
 	root = new vertex;
-	std::pair<vertex*, int> now = { root, 0 }; //Вершина и индекс, на которых остановились
-	int remainder = 0; //Количество оставшихся суффиксов, которым нужны листья
+	std::pair<vertex*, int> now = { root, 0 }; //Р’РµСЂС€РёРЅР° Рё РёРЅРґРµРєСЃ, РЅР° РєРѕС‚РѕСЂС‹С… РѕСЃС‚Р°РЅРѕРІРёР»РёСЃСЊ
+	int remainder = 0; //РљРѕР»РёС‡РµСЃС‚РІРѕ РѕСЃС‚Р°РІС€РёС…СЃСЏ СЃСѓС„С„РёРєСЃРѕРІ, РєРѕС‚РѕСЂС‹Рј РЅСѓР¶РЅС‹ Р»РёСЃС‚СЊСЏ
 
 	for (int i = 0; i < str.size(); i++) {
 		vertex* from = nullptr;
@@ -100,7 +100,7 @@ suf_tree::suf_tree(const std::string& input) {
 		while (true) {
 			if (now.second == get_right_border(now.first->right_border, i)) {
 				from = nullptr;
-				vertex* next = now.first->children[get_index(str[i])]; //Указаетель на следующую вершину
+				vertex* next = now.first->children[get_index(str[i])]; //РЈРєР°Р·Р°РµС‚РµР»СЊ РЅР° СЃР»РµРґСѓСЋС‰СѓСЋ РІРµСЂС€РёРЅСѓ
 				if (next == nullptr) {
 					remainder--;
 					new_edge(now, i);
@@ -134,7 +134,7 @@ suf_tree::suf_tree(const std::string& input) {
 					new_edge(now, i);
 				}
 			}
-			//Проверка на то, что остались суффиксы без листьев
+			//РџСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, С‡С‚Рѕ РѕСЃС‚Р°Р»РёСЃСЊ СЃСѓС„С„РёРєСЃС‹ Р±РµР· Р»РёСЃС‚СЊРµРІ
 			if (remainder == 0) {
 				break;
 			}
@@ -143,7 +143,7 @@ suf_tree::suf_tree(const std::string& input) {
 }
 
 
-//Создание нового ответвления c одним символом
+//РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ РѕС‚РІРµС‚РІР»РµРЅРёСЏ c РѕРґРЅРёРј СЃРёРјРІРѕР»РѕРј
 void suf_tree::new_edge(std::pair<vertex*, int>& now, int i)
 {
 	now.first->children[get_index(str[i])] = new vertex;
@@ -155,7 +155,7 @@ void suf_tree::new_edge(std::pair<vertex*, int>& now, int i)
 }
 
 
-//Переход по суффиксной ссылке
+//РџРµСЂРµС…РѕРґ РїРѕ СЃСѓС„С„РёРєСЃРЅРѕР№ СЃСЃС‹Р»РєРµ
 void suf_tree::suf_step(std::pair<vertex*, int>& now, int i)
 {
 	if (now.first == root) {
@@ -163,7 +163,7 @@ void suf_tree::suf_step(std::pair<vertex*, int>& now, int i)
 	}
 	int left_border = now.first->left_border;
 	int length = now.second - now.first->left_border;
-	std::pair<vertex*, int> to = { nullptr, 0 }; //Суффиксная ссылка и новое now
+	std::pair<vertex*, int> to = { nullptr, 0 }; //РЎСѓС„С„РёРєСЃРЅР°СЏ СЃСЃС‹Р»РєР° Рё РЅРѕРІРѕРµ now
 	if (now.first->parent == root && now.second - left_border <= 1) {
 		to = { root, 0 };
 		length--;
@@ -173,12 +173,12 @@ void suf_tree::suf_step(std::pair<vertex*, int>& now, int i)
 			left_border++;
 			length--;
 		}
-		//Переходим с помомощью суффиксной ссылки родителя
+		//РџРµСЂРµС…РѕРґРёРј СЃ РїРѕРјРѕРјРѕС‰СЊСЋ СЃСѓС„С„РёРєСЃРЅРѕР№ СЃСЃС‹Р»РєРё СЂРѕРґРёС‚РµР»СЏ
 		to.first = now.first->parent->suf_ptr->children[get_index(str[left_border])];
 		to.second = to.first->left_border + length;
 	}
 
-	//Поднимаемся по дереву до своего индекса (до суффиксной вершины)
+	//РџРѕРґРЅРёРјР°РµРјСЃСЏ РїРѕ РґРµСЂРµРІСѓ РґРѕ СЃРІРѕРµРіРѕ РёРЅРґРµРєСЃР° (РґРѕ СЃСѓС„С„РёРєСЃРЅРѕР№ РІРµСЂС€РёРЅС‹)
 	int new_length = get_right_border(to.first->right_border, i) - to.first->left_border;
 	while (length > new_length) {
 		left_border += new_length;
