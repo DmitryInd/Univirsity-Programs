@@ -1,4 +1,4 @@
-#define _USE_MATH_DEFINES
+п»ї#define _USE_MATH_DEFINES
 #include <math.h>
 #include <iostream>
 #include <complex>
@@ -33,7 +33,7 @@ struct point {
 	}
 };
 
-//Сравнение полярных углов
+//РЎСЂР°РІРЅРµРЅРёРµ РїРѕР»СЏСЂРЅС‹С… СѓРіР»РѕРІ
 bool greater_point (point first_line, point second_line) {
 	std::complex<double> first_vec(first_line.x, first_line.y);
 	std::complex<double> second_vec(second_line.x, second_line.y);
@@ -46,7 +46,7 @@ bool greater_point (point first_line, point second_line) {
 	return second_angle > first_angle;
 }
 
-//Получение индекса
+//РџРѕР»СѓС‡РµРЅРёРµ РёРЅРґРµРєСЃР°
 int index(int num, int size, int start) {
 	num = start - num;
 	while (num < 0) {
@@ -56,7 +56,7 @@ int index(int num, int size, int start) {
 	return num;
 }
 
-//Поиск самой левой и нижней точки
+//РџРѕРёСЃРє СЃР°РјРѕР№ Р»РµРІРѕР№ Рё РЅРёР¶РЅРµР№ С‚РѕС‡РєРё
 int search_edge(std::vector<point>& figure) {
 	int min_id = 0;
 	for (int i = 1; i < figure.size(); i++) {
@@ -73,7 +73,7 @@ int search_edge(std::vector<point>& figure) {
 	return min_id;
 }
 
-//Сумма Минковского
+//РЎСѓРјРјР° РњРёРЅРєРѕРІСЃРєРѕРіРѕ
 std::vector<point> mincovsky_sum(std::vector<point>& first_figure, std::vector<point>& second_figure) {
 	int i = 0;
 	int j = 0;
@@ -101,13 +101,13 @@ std::vector<point> mincovsky_sum(std::vector<point>& first_figure, std::vector<p
 	return figure_sum;
 }
 
-//Произведение векторов и возвращение значения по оси z
+//РџСЂРѕРёР·РІРµРґРµРЅРёРµ РІРµРєС‚РѕСЂРѕРІ Рё РІРѕР·РІСЂР°С‰РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РїРѕ РѕСЃРё z
 double product_vec(point& first_p, point& second_p) {
 	point third_vec = second_p - first_p;
 	return first_p.x * third_vec.y - first_p.y * third_vec.x;
 }
 
-//Проверка на пересечение фигур
+//РџСЂРѕРІРµСЂРєР° РЅР° РїРµСЂРµСЃРµС‡РµРЅРёРµ С„РёРіСѓСЂ
 bool intersection(std::vector<point>& first_figure, std::vector<point>& second_figure) {
 	for (int i = 0; i < second_figure.size(); i++) {
 		second_figure[i] = point() - second_figure[i];
