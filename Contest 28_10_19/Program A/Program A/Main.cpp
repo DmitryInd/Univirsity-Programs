@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <vector>
 #include <math.h>
 
@@ -6,7 +6,7 @@ const double epsilon = pow(10, -8);
 
 
 
-//Точка(вектор) в пространстве
+//РўРѕС‡РєР°(РІРµРєС‚РѕСЂ) РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 struct point {
 	double x = 0;
 	double y = 0;
@@ -34,19 +34,19 @@ struct point {
 	}
 };
 
-//Расстояние между точками
+//Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ С‚РѕС‡РєР°РјРё
 double distance(const point& first, const point& second) {
 	return sqrt(pow(first.x - second.x, 2) + pow(first.y - second.y, 2) + pow(first.z - second.z, 2));
 }
 
-//Поиск минимального расстояния между точкой и отрезком
+//РџРѕРёСЃРє РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ РјРµР¶РґСѓ С‚РѕС‡РєРѕР№ Рё РѕС‚СЂРµР·РєРѕРј
 double search_min_distance(const point& from, std::vector<point>& vertices) {
 	point first_to = vertices[2];
 	point second_to = vertices[3];
 	while (distance(first_to, second_to) > epsilon) {
-		point vec_of_line = (second_to - first_to) / 3; //Вектор отрезка
-		point first = first_to + vec_of_line; //1/3 отрезка
-		point second = second_to - vec_of_line; //2/3 отрезка
+		point vec_of_line = (second_to - first_to) / 3; //Р’РµРєС‚РѕСЂ РѕС‚СЂРµР·РєР°
+		point first = first_to + vec_of_line; //1/3 РѕС‚СЂРµР·РєР°
+		point second = second_to - vec_of_line; //2/3 РѕС‚СЂРµР·РєР°
 
 		double first_distance = distance(first, from);
 		double second_distance = distance(second, from);
@@ -61,12 +61,12 @@ double search_min_distance(const point& from, std::vector<point>& vertices) {
 	return distance(first_to, from);
 }
 
-//Рассточние между отрезками
+//Р Р°СЃСЃС‚РѕС‡РЅРёРµ РјРµР¶РґСѓ РѕС‚СЂРµР·РєР°РјРё
 double search_distance_line(std::vector<point>& vertices) {
 	while (distance(vertices[0], vertices[1]) > epsilon) {
-		point vec_of_line = (vertices[1] - vertices[0])/3; //Вектор отрезка
-		point first = vertices[0] + vec_of_line; //1/3 отрезка
-		point second = vertices[1] - vec_of_line; //2/3 отрезка
+		point vec_of_line = (vertices[1] - vertices[0])/3; //Р’РµРєС‚РѕСЂ РѕС‚СЂРµР·РєР°
+		point first = vertices[0] + vec_of_line; //1/3 РѕС‚СЂРµР·РєР°
+		point second = vertices[1] - vec_of_line; //2/3 РѕС‚СЂРµР·РєР°
 
 		double first_distance = search_min_distance(first, vertices);
 		double second_distance = search_min_distance(second, vertices);
