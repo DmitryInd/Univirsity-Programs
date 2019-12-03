@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<vector>
 #include<array>
 #include<cfloat>
@@ -9,7 +9,7 @@ constexpr double base_angle = 0.000001;
 
 
 
-//Точка(вектор) в пространстве
+//РўРѕС‡РєР°(РІРµРєС‚РѕСЂ) РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 struct point {
 	double x = DBL_MAX;
 	double y = DBL_MAX;
@@ -46,7 +46,7 @@ struct point {
 	}
 };
 
-//Попадание в оболочку и выход из неё
+//РџРѕРїР°РґР°РЅРёРµ РІ РѕР±РѕР»РѕС‡РєСѓ Рё РІС‹С…РѕРґ РёР· РЅРµС‘
 void point::step() {
 	if (prev->next == this) {
 		prev->next = next;
@@ -58,29 +58,29 @@ void point::step() {
 	}
 }
 
-//Поворот радиус вектора точки на заданный угл
+//РџРѕРІРѕСЂРѕС‚ СЂР°РґРёСѓСЃ РІРµРєС‚РѕСЂР° С‚РѕС‡РєРё РЅР° Р·Р°РґР°РЅРЅС‹Р№ СѓРіР»
 void point::rotate(double angle) {
 	double x_next, y_next, z_next;
-	//Поворот вокруг оси x
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё x
 	z_next = z * cos(angle) + y * sin(angle);
 	y_next = -z * sin(angle) + y * cos(angle);
 	z = z_next;
 	y = y_next;
-	//Поворот вокруг оси y
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё y
 	x_next = x * cos(angle) + z * sin(angle);
 	z_next = -x * sin(angle) + z * cos(angle);
 	x = x_next;
 	z = z_next;
 
-	//Поворот вокруг оси z
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё z
 	x_next = x * cos(angle) + y * sin(angle);
 	y_next = -x * sin(angle) + y * cos(angle);
 	x = x_next;
 	y = y_next;
 }
 
-/*Векторное произведение двух векторов, определённых тремя точками, в проекции на плоскость xy
-или знак векторного произведения в проекции Чана при t = -INF*/
+/*Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РґРІСѓС… РІРµРєС‚РѕСЂРѕРІ, РѕРїСЂРµРґРµР»С‘РЅРЅС‹С… С‚СЂРµРјСЏ С‚РѕС‡РєР°РјРё, РІ РїСЂРѕРµРєС†РёРё РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ xy
+РёР»Рё Р·РЅР°Рє РІРµРєС‚РѕСЂРЅРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РІ РїСЂРѕРµРєС†РёРё Р§Р°РЅР° РїСЂРё t = -INF*/
 double initial_vector_product(const point* first_p, const point* second_p, const point* third_p) {
 	if (first_p == nullptr || second_p == nullptr || third_p == nullptr ||
 		first_p->index == -1 || second_p->index == -1 || third_p->index == -1) {
@@ -91,13 +91,13 @@ double initial_vector_product(const point* first_p, const point* second_p, const
 	return first_vector.x * second_vector.y - second_vector.x * first_vector.y;
 }
 
-/*Векторное произведение двух векторов в проекции на плоскость xy
-или знак векторного произведения в проекции Чана при t = -INF*/
+/*Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РґРІСѓС… РІРµРєС‚РѕСЂРѕРІ РІ РїСЂРѕРµРєС†РёРё РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ xy
+РёР»Рё Р·РЅР°Рє РІРµРєС‚РѕСЂРЅРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РІ РїСЂРѕРµРєС†РёРё Р§Р°РЅР° РїСЂРё t = -INF*/
 double initial_vector_product(const point* first_vector, const point* second_vector) {
 	return first_vector->x * second_vector->y - second_vector->x * first_vector->y;
 }
 
-//Поиск момента, в который вторая точка попадёт в оболочку
+//РџРѕРёСЃРє РјРѕРјРµРЅС‚Р°, РІ РєРѕС‚РѕСЂС‹Р№ РІС‚РѕСЂР°СЏ С‚РѕС‡РєР° РїРѕРїР°РґС‘С‚ РІ РѕР±РѕР»РѕС‡РєСѓ
 double search_intersection_time(const point* first_p, const point* second_p, const point* third_p) {
 	if (first_p == nullptr || second_p == nullptr || third_p == nullptr ||
 		first_p->index == -1 || second_p->index == -1 || third_p->index == -1) {
@@ -109,7 +109,7 @@ double search_intersection_time(const point* first_p, const point* second_p, con
 		/ initial_vector_product(&first_vector, &second_vector);
 }
 
-//Поиск нижней части оболочки
+//РџРѕРёСЃРє РЅРёР¶РЅРµР№ С‡Р°СЃС‚Рё РѕР±РѕР»РѕС‡РєРё
 std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, point* zero, int begin = 0) {
 	if (size <= 1) {
 		std::vector<point*> entire_hull;
@@ -119,18 +119,18 @@ std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, poi
 		return entire_hull;
 	}
 
-	//Точки, состовляющие мост
+	//РўРѕС‡РєРё, СЃРѕСЃС‚РѕРІР»СЏСЋС‰РёРµ РјРѕСЃС‚
 	point* u;
 	point* v;
 	u = &vertices[begin + size / 2 - 1];
 	v = &vertices[begin + size / 2];
 	point* midle = v;
-	//Разбиение оболочки на две части
+	//Р Р°Р·Р±РёРµРЅРёРµ РѕР±РѕР»РѕС‡РєРё РЅР° РґРІРµ С‡Р°СЃС‚Рё
 	std::vector<point*> first_half_hull = search_down_hull(vertices, size / 2, zero, begin);
 	std::vector<point*> second_half_hull = search_down_hull(vertices, size - size / 2, zero, begin + size / 2);
 	std::vector<point*> entire_hull;
 
-	//Поиск моста при t = -INF
+	//РџРѕРёСЃРє РјРѕСЃС‚Р° РїСЂРё t = -INF
 	while (true) {
 		if (initial_vector_product(u, v, v->next) < 0) {
 			v = v->next;
@@ -146,7 +146,7 @@ std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, poi
 	double first_time = -DBL_MAX;
 	double second_time;
 	std::array<double, 6> certain_time;
-	//Слияние
+	//РЎР»РёСЏРЅРёРµ
 	for (int i = 0, j = 0; ; first_time = second_time) {
 		certain_time[0] = search_intersection_time(first_half_hull[i]->prev, first_half_hull[i], first_half_hull[i]->next);
 		certain_time[1] = search_intersection_time(second_half_hull[j]->prev, second_half_hull[j], second_half_hull[j]->next);
@@ -154,7 +154,7 @@ std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, poi
 		certain_time[3] = search_intersection_time(u->prev, u, v);
 		certain_time[4] = search_intersection_time(u, v, v->next);
 		certain_time[5] = search_intersection_time(u, v->prev, v);
-		//Поиск ближайшего события
+		//РџРѕРёСЃРє Р±Р»РёР¶Р°Р№С€РµРіРѕ СЃРѕР±С‹С‚РёСЏ
 		second_time = DBL_MAX;
 		int event_number = -1;
 		for (int h = 0; h < 6; h++) {
@@ -197,7 +197,7 @@ std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, poi
 	}
 	entire_hull.push_back(zero);
 
-	//Создание моста и возврат к t = -INF с обновлением связей
+	//РЎРѕР·РґР°РЅРёРµ РјРѕСЃС‚Р° Рё РІРѕР·РІСЂР°С‚ Рє t = -INF СЃ РѕР±РЅРѕРІР»РµРЅРёРµРј СЃРІСЏР·РµР№
 	int real_size = entire_hull.size() - 2;
 	u->next = v;
 	v->prev = u;
@@ -223,7 +223,7 @@ std::vector<point*> search_down_hull(std::vector<point>& vertices, int size, poi
 	return entire_hull;
 }
 
-//Поиск внешней оболочки
+//РџРѕРёСЃРє РІРЅРµС€РЅРµР№ РѕР±РѕР»РѕС‡РєРё
 double search_convex_hull(std::vector<point>& vertices, point* zero) {
 	std::vector<std::vector<bool>> edges(vertices.size(), std::vector<bool>(vertices.size(), false));
 	std::sort(vertices.begin(), vertices.end());
