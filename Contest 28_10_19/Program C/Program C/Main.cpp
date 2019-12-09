@@ -12,9 +12,6 @@ struct point {
 	double x = 0;
 	double y = 0;
 
-	point(const point& other) = default;
-	point() = default;
-
 	point& operator=(const point& other) = default;
 	point operator-(const point& other) const
 	{
