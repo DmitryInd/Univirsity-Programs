@@ -2,7 +2,7 @@
 #include <vector>
 #include <math.h>
 
-const double epsilon = pow(10, -14);
+const double epsilon = pow(10, -9);
 
 
 
