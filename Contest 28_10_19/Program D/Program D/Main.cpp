@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<vector>
 #include<array>
 #include<cfloat>
@@ -8,7 +8,7 @@
 constexpr double base_angle = 0.00000001;
 
 
-//Точка(вектор) в пространстве
+//РўРѕС‡РєР°(РІРµРєС‚РѕСЂ) РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ
 struct point {
 	double x = DBL_MAX;
 	double y = DBL_MAX;
@@ -39,7 +39,7 @@ struct node_hull {
 	void step();
 };
 
-//Попадание в оболочку и выход из неё
+//РџРѕРїР°РґР°РЅРёРµ РІ РѕР±РѕР»РѕС‡РєСѓ Рё РІС‹С…РѕРґ РёР· РЅРµС‘
 void node_hull::step() {
 	if (prev->next == this) {
 		prev->next = next;
@@ -51,43 +51,43 @@ void node_hull::step() {
 	}
 }
 
-/*Поворот радиус вектора точки на заданный угл вокруг всех осей для
-выполнения условий корректной работы алгоритма Чана.
-(Никакие три точки не должны лежать в одной вертикальной плоскости)*/
+/*РџРѕРІРѕСЂРѕС‚ СЂР°РґРёСѓСЃ РІРµРєС‚РѕСЂР° С‚РѕС‡РєРё РЅР° Р·Р°РґР°РЅРЅС‹Р№ СѓРіР» РІРѕРєСЂСѓРі РІСЃРµС… РѕСЃРµР№ РґР»СЏ
+РІС‹РїРѕР»РЅРµРЅРёСЏ СѓСЃР»РѕРІРёР№ РєРѕСЂСЂРµРєС‚РЅРѕР№ СЂР°Р±РѕС‚С‹ Р°Р»РіРѕСЂРёС‚РјР° Р§Р°РЅР°.
+(РќРёРєР°РєРёРµ С‚СЂРё С‚РѕС‡РєРё РЅРµ РґРѕР»Р¶РЅС‹ Р»РµР¶Р°С‚СЊ РІ РѕРґРЅРѕР№ РІРµСЂС‚РёРєР°Р»СЊРЅРѕР№ РїР»РѕСЃРєРѕСЃС‚Рё)*/
 void point::rotate(double angle) {
 	double x_next, y_next, z_next;
-	//Поворот вокруг оси x
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё x
 	z_next = z * cos(angle) + y * sin(angle);
 	y_next = -z * sin(angle) + y * cos(angle);
 	z = z_next;
 	y = y_next;
-	//Поворот вокруг оси y
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё y
 	x_next = x * cos(angle) + z * sin(angle);
 	z_next = -x * sin(angle) + z * cos(angle);
 	x = x_next;
 	z = z_next;
 
-	//Поворот вокруг оси z
+	//РџРѕРІРѕСЂРѕС‚ РІРѕРєСЂСѓРі РѕСЃРё z
 	x_next = x * cos(angle) + y * sin(angle);
 	y_next = -x * sin(angle) + y * cos(angle);
 	x = x_next;
 	y = y_next;
 }
 
-//Компоратор для сортировки по оси x
+//РљРѕРјРїРѕСЂР°С‚РѕСЂ РґР»СЏ СЃРѕСЂС‚РёСЂРѕРІРєРё РїРѕ РѕСЃРё x
 struct compare_by_x {
 	bool operator()(const node_hull& first, const node_hull& second) {
 		return first.coord.x < second.coord.x;
 	}
 };
 
-//Проверка на существование/фиктивность точки
+//РџСЂРѕРІРµСЂРєР° РЅР° СЃСѓС‰РµСЃС‚РІРѕРІР°РЅРёРµ/С„РёРєС‚РёРІРЅРѕСЃС‚СЊ С‚РѕС‡РєРё
 bool is_point_exist(const node_hull* point_ptr) {
 	return (point_ptr != nullptr && point_ptr->index != -1);
 }
 
-/*Векторное произведение двух векторов, определённых тремя точками, в проекции на плоскость xy
-или знак векторного произведения в проекции Чана при t = -INF*/
+/*Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РґРІСѓС… РІРµРєС‚РѕСЂРѕРІ, РѕРїСЂРµРґРµР»С‘РЅРЅС‹С… С‚СЂРµРјСЏ С‚РѕС‡РєР°РјРё, РІ РїСЂРѕРµРєС†РёРё РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ xy
+РёР»Рё Р·РЅР°Рє РІРµРєС‚РѕСЂРЅРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РІ РїСЂРѕРµРєС†РёРё Р§Р°РЅР° РїСЂРё t = -INF*/
 double initial_vector_product(const node_hull* first_p, const node_hull* second_p, const node_hull* third_p) {
 	if (!(is_point_exist(first_p) && is_point_exist(second_p) && is_point_exist(third_p))) {
 		return 1;
@@ -97,13 +97,13 @@ double initial_vector_product(const node_hull* first_p, const node_hull* second_
 	return first_vector.x * second_vector.y - second_vector.x * first_vector.y;
 }
 
-/*Векторное произведение двух векторов в проекции на плоскость xy
-или знак векторного произведения в проекции Чана при t = -INF*/
+/*Р’РµРєС‚РѕСЂРЅРѕРµ РїСЂРѕРёР·РІРµРґРµРЅРёРµ РґРІСѓС… РІРµРєС‚РѕСЂРѕРІ РІ РїСЂРѕРµРєС†РёРё РЅР° РїР»РѕСЃРєРѕСЃС‚СЊ xy
+РёР»Рё Р·РЅР°Рє РІРµРєС‚РѕСЂРЅРѕРіРѕ РїСЂРѕРёР·РІРµРґРµРЅРёСЏ РІ РїСЂРѕРµРєС†РёРё Р§Р°РЅР° РїСЂРё t = -INF*/
 double initial_vector_product(const point* first_vector, const point* second_vector) {
 	return first_vector->x * second_vector->y - second_vector->x * first_vector->y;
 }
 
-//Поиск момента, в который вторая точка попадёт в оболочку
+//РџРѕРёСЃРє РјРѕРјРµРЅС‚Р°, РІ РєРѕС‚РѕСЂС‹Р№ РІС‚РѕСЂР°СЏ С‚РѕС‡РєР° РїРѕРїР°РґС‘С‚ РІ РѕР±РѕР»РѕС‡РєСѓ
 double search_intersection_time(const node_hull* first_p, const node_hull* second_p, const node_hull* third_p) {
 	if (!(is_point_exist(first_p) && is_point_exist(second_p) && is_point_exist(third_p))) {
 		return DBL_MAX;
@@ -114,7 +114,7 @@ double search_intersection_time(const node_hull* first_p, const node_hull* secon
 		/ initial_vector_product(&first_vector, &second_vector);
 }
 
-//Поиск нижней части оболочки
+//РџРѕРёСЃРє РЅРёР¶РЅРµР№ С‡Р°СЃС‚Рё РѕР±РѕР»РѕС‡РєРё
 std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int size, node_hull* zero, int begin = 0) {
 	if (size <= 1) {
 		std::vector<node_hull*> entire_hull;
@@ -124,16 +124,16 @@ std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int siz
 		return entire_hull;
 	}
 
-	//Точки, состовляющие мост
+	//РўРѕС‡РєРё, СЃРѕСЃС‚РѕРІР»СЏСЋС‰РёРµ РјРѕСЃС‚
 	node_hull* u = &vertices[begin + size / 2 - 1];
 	node_hull* v = &vertices[begin + size / 2];
 	node_hull* midle = v;
-	//Разбиение оболочки на две части
+	//Р Р°Р·Р±РёРµРЅРёРµ РѕР±РѕР»РѕС‡РєРё РЅР° РґРІРµ С‡Р°СЃС‚Рё
 	std::vector<node_hull*> first_half_hull = find_down_hull(vertices, size / 2, zero, begin);
 	std::vector<node_hull*> second_half_hull = find_down_hull(vertices, size - size / 2, zero, begin + size / 2);
 	std::vector<node_hull*> entire_hull;
 
-	//Поиск моста при t = -INF
+	//РџРѕРёСЃРє РјРѕСЃС‚Р° РїСЂРё t = -INF
 	while (true) {
 		if (initial_vector_product(u, v, v->next) < 0) {
 			v = v->next;
@@ -149,7 +149,7 @@ std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int siz
 	double first_time = -DBL_MAX;
 	double second_time;
 	std::array<double, 6> certain_time;
-	//Слияние
+	//РЎР»РёСЏРЅРёРµ
 	for (int i = 0, j = 0; ; first_time = second_time) {
 		certain_time[0] = search_intersection_time(first_half_hull[i]->prev, first_half_hull[i], first_half_hull[i]->next);
 		certain_time[1] = search_intersection_time(second_half_hull[j]->prev, second_half_hull[j], second_half_hull[j]->next);
@@ -157,7 +157,7 @@ std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int siz
 		certain_time[3] = search_intersection_time(u->prev, u, v);
 		certain_time[4] = search_intersection_time(u, v, v->next);
 		certain_time[5] = search_intersection_time(u, v->prev, v);
-		//Поиск ближайшего события
+		//РџРѕРёСЃРє Р±Р»РёР¶Р°Р№С€РµРіРѕ СЃРѕР±С‹С‚РёСЏ
 		second_time = DBL_MAX;
 		int event_number = -1;
 		for (int h = 0; h < 6; h++) {
@@ -200,7 +200,7 @@ std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int siz
 	}
 	entire_hull.push_back(zero);
 
-	//Создание моста и возврат к t = -INF с обновлением связей
+	//РЎРѕР·РґР°РЅРёРµ РјРѕСЃС‚Р° Рё РІРѕР·РІСЂР°С‚ Рє t = -INF СЃ РѕР±РЅРѕРІР»РµРЅРёРµРј СЃРІСЏР·РµР№
 	u->next = v;
 	v->prev = u;
 	for (int real_size = entire_hull.size() - 2; real_size >= 0; real_size--) {
@@ -225,7 +225,7 @@ std::vector<node_hull*> find_down_hull(std::vector<node_hull>& vertices, int siz
 	return entire_hull;
 }
 
-//Поиск внешней оболочки
+//РџРѕРёСЃРє РІРЅРµС€РЅРµР№ РѕР±РѕР»РѕС‡РєРё
 double find_convex_hull(std::vector<node_hull>& vertices, node_hull* zero) {
 	std::vector<std::vector<bool>> edges(vertices.size(), std::vector<bool>(vertices.size(), false));
 	compare_by_x point_comp;
