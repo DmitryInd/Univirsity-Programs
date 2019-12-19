@@ -230,7 +230,7 @@ BigInteger sum(const BigInteger& left, const BigInteger& right) {
 	return sum_int;
 }
 
-//Разность без учёта знака, в левом число больше или равно правому
+//Разность без учёта знака, левое число больше или равно правому
 BigInteger sub(const BigInteger& left, const BigInteger& right) {
 	BigInteger sub_int;
 	int carry = 0;
@@ -392,7 +392,7 @@ BigInteger shift(const BigInteger& obj, int num_digit) {
 	return shifted;
 }
 
-//Возвращает правую часть числа (до разрада length невключительно)
+//Возвращает правую часть числа (от 1 разряда до length невключительно)
 BigInteger separate_first(const BigInteger& obj, unsigned int length) {
 	BigInteger part;
 	length = (length > obj.value.size()) ? obj.value.size() : length;
@@ -404,7 +404,7 @@ BigInteger separate_first(const BigInteger& obj, unsigned int length) {
 	return part;
 }
 
-//Возвращает левую часть числа (до разрада length включительно)
+//Возвращает левую часть числа (с разряда length до последнего включительно)
 BigInteger separate_second(const BigInteger& obj, unsigned int length) {
 	BigInteger part;
 	for (unsigned int i = length; i < obj.value.size(); i++) {
