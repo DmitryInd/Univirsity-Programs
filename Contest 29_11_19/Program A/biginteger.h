@@ -52,7 +52,7 @@ private:
 	friend BigInteger separate_first(const BigInteger& obj, unsigned int length);
 	friend BigInteger separate_second(const BigInteger& obj, unsigned int length);
 	friend BigInteger shift(const BigInteger& obj, int num_digit);
-	friend bool compare_abs(BigInteger left, BigInteger right);
+	friend bool compare_abs(const BigInteger &left, const BigInteger &right);
 	void norm_zero();
 };
 
@@ -148,22 +148,27 @@ bool BigInteger::operator!=(const BigInteger& other) {
 	return !operator==(other);
 }
 
-bool BigInteger::operator>=(const BigInteger& other) {
-	if (value.size() != other.value.size()) {
-		return (value.size() > other.value.size());
+//Сравнение >= по модулю
+bool compare_abs(const BigInteger& left, const BigInteger& right) {
+	if (left.value.size() != right.value.size()) {
+		return (left.value.size() > right.value.size());
 	}
-	if (sign != other.sign) {
-		return (sign > other.sign);
-	}
-	for (int i = value.size() - 1; i >= 0; i--) {
-		if (value[i] > other.value[i]) {
+	for (int i = left.value.size() - 1; i >= 0; i--) {
+		if (left.value[i] > right.value[i]) {
 			return true;
 		}
-		else if (value[i] < other.value[i]) {
+		else if (left.value[i] < right.value[i]) {
 			return false;
 		}
 	}
 	return true;
+}
+
+bool BigInteger::operator>=(const BigInteger& other) {
+	if (sign != other.sign) {
+		return (sign > other.sign);
+	}
+	compare_abs(*this, other);
 }
 
 bool BigInteger::operator<(const BigInteger& other) {
@@ -171,11 +176,11 @@ bool BigInteger::operator<(const BigInteger& other) {
 }
 
 bool BigInteger::operator<=(const BigInteger& other) {
-	if (value.size() != other.value.size()) {
-		return (value.size() < other.value.size());
-	}
 	if (sign != other.sign) {
 		return (sign < other.sign);
+	}
+	if (value.size() != other.value.size()) {
+		return (value.size() < other.value.size());
 	}
 	for (int i = value.size() - 1; i >= 0; i--) {
 		if (value[i] > other.value[i]) {
@@ -190,13 +195,6 @@ bool BigInteger::operator<=(const BigInteger& other) {
 
 bool BigInteger::operator>(const BigInteger& other) {
 	return !operator<=(other);
-}
-
-//Сравнение >= по модулю
-bool compare_abs(BigInteger left, BigInteger right) {
-	left.sign = 1;
-	right.sign = 1;
-	return left >= right;
 }
 
 //Сумма без учёта знака, в левом число больше или равно правому
