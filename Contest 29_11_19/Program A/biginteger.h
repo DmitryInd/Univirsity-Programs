@@ -168,7 +168,7 @@ bool BigInteger::operator>=(const BigInteger& other) {
 	if (sign != other.sign) {
 		return (sign > other.sign);
 	}
-	compare_abs(*this, other);
+	return compare_abs(*this, other);
 }
 
 bool BigInteger::operator<(const BigInteger& other) {
